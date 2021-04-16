@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzu.edu.DatadicdetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzu.edu.daoyun.entity.Datadicdetail">
+        <id column="dataDicDetailID" property="dataDicDetailID" />
+        <result column="dataDicID" property="dataDicID" />
+        <result column="value" property="dataValue" />
+        <result column="rank" property="dataRank" />
+        <result column="defaultValue" property="defaultValue" />
+        <result column="createTime" property="createTime" />
+        <result column="lastEditTime" property="lastEditTime" />
+        <result column="lastEditorID" property="lastEditorID" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        dataDicDetailID, dataDicID, dataValue, dataRank, defaultValue, createTime, lastEditTime, lastEditorID
+    </sql>
+
+</mapper>

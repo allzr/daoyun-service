@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzu.edu.UrlMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzu.edu.daoyun.entity.Url">
+        <id column="urlID" property="urlID" />
+        <result column="urlName" property="urlName" />
+        <result column="url" property="url" />
+        <result column="lastEditorID" property="lastEditorID" />
+        <result column="lastEditTime" property="lastEditTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        urlID, urlName, url, lastEditorID, lastEditTime
+    </sql>
+
+</mapper>

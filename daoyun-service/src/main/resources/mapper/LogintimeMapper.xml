@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzu.edu.LogintimeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzu.edu.daoyun.entity.Logintime">
+        <id column="loginTimeID" property="loginTimeID" />
+        <result column="userID" property="userID" />
+        <result column="loginType" property="loginType" />
+        <result column="loginTime" property="loginTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        loginTimeID, userID, loginType, loginTime
+    </sql>
+
+</mapper>

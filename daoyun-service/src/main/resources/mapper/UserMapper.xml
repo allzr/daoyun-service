@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzu.edu.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.fzu.edu.daoyun.entity.User">
+        <id column="userID" property="userID" />
+        <result column="userType" property="userType" />
+        <result column="stu_tea_adm_Number" property="stuTeaAdmNumber" />
+        <result column="name" property="realName" />
+        <result column="bornYear" property="bornYear" />
+        <result column="bornMonth" property="bornMonth" />
+        <result column="phoneNumber" property="phoneNumber" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="EXP" property="exp" />
+        <result column="QQID" property="qqid" />
+        <result column="VXID" property="vxid" />
+        <result column="blogID" property="blogID" />
+        <result column="schoolName" property="schoolName" />
+        <result column="collegeName" property="collegeName" />
+        <result column="headProtrait" property="headProtrait" />
+        <result column="lastLoginTime" property="lastLoginTime" />
+        <result column="lastLoginIP" property="lastLoginIP" />
+        <result column="delete" property="isDelete" />
+        <result column="createTime" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        userID, userType, stu_tea_adm_Number, realName, bornYear, bornMonth, phoneNumber, username, password, EXP, QQID, VXID, blogID, schoolName, collegeName, headProtrait, lastLoginTime, lastLoginIP, isDelete, createTime
+    </sql>
+
+
+</mapper>
