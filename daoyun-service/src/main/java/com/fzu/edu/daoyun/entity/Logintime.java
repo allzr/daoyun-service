@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -36,7 +37,7 @@ public class Logintime implements Serializable {
     private Integer loginType;
 
     @TableField("loginTime")
-    private Integer loginTime;
+    private LocalDateTime loginTime;
 
 
 }

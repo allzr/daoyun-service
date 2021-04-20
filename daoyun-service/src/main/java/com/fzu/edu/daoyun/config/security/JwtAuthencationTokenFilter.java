@@ -42,7 +42,7 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "1728000");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization" );
         String authHeader = httpServletRequest.getHeader(tokenHeader);
         if(null!=authHeader&&authHeader.startsWith(tokenHead)){
             String authToken = authHeader.substring(tokenHead.length()+1);

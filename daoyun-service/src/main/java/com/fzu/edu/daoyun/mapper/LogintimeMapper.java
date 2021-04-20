@@ -2,6 +2,7 @@ package com.fzu.edu.daoyun.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fzu.edu.daoyun.entity.Logintime;
+import org.mapstruct.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.fzu.edu.daoyun.entity.Logintime;
  * @author Xing
  * @since 2021-04-12
  */
+@Mapper
 public interface LogintimeMapper extends BaseMapper<Logintime> {
 
 }

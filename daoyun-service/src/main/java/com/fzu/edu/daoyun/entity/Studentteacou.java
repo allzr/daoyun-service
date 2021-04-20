@@ -22,21 +22,23 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="Studentcourse对象", description="")
-public class Studentcourse implements Serializable {
+@ApiModel(value="Studentteacou对象", description="")
+public class Studentteacou implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "stuCouID", type = IdType.AUTO)
-    private Integer stuCouID;
+    @TableId(value = "stuTeaCouID", type = IdType.AUTO)
+    private Integer stuTeaCouID;
+
+
 
     @TableField("userID")
     private Integer userID;
 
-    @TableField("couID")
-    private Integer couID;
+    @TableField("teaCouID")
+    private Integer teaCouID;
 
-    private Integer score;
+    private Integer EXP;
 
     @TableField("lastEditorID")
     private Integer lastEditorID;

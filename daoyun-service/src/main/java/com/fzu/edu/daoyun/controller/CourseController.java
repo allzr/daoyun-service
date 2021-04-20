@@ -31,13 +31,13 @@ public class CourseController {
     private UserServiceImpl userService;
 
     @PostMapping("/create")
-    @ApiOperation("创建班课")
+    @ApiOperation("创建班课，已实现")
     public ReturnBean createCourse(Principal principal, Course course ,@RequestParam(value = "开学年份") int year)
     {
         return courseService.createCourse(userService.getUserByUsername(principal.getName()),course,year);
     }
     @PutMapping("/delete/{id}")
-    @ApiOperation("删除班课")
+    @ApiOperation("删除班课，已实现")
     public ReturnBean deleteCourse(@PathVariable String id){
         return courseService.deleteCourse(id);
     }

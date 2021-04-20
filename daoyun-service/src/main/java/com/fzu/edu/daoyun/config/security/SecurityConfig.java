@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/user/login*",
                 "/user/register",
                 "/user/logout",
-                "/user/code",
+                "/user/code*",
                 "/doc.html",
                 "/webjars/**",
                 "/swagger-resources/**",

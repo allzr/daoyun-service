@@ -1,7 +1,8 @@
 package com.fzu.edu.daoyun.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.fzu.edu.daoyun.entity.Studentcourse;
+import com.fzu.edu.daoyun.entity.Studentteacou;
+import org.mapstruct.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.fzu.edu.daoyun.entity.Studentcourse;
  * @author Xing
  * @since 2021-04-12
  */
-public interface StudentcourseMapper extends BaseMapper<Studentcourse> {
+@Mapper
+public interface StudentteacouMapper extends BaseMapper<Studentteacou> {
 
 }

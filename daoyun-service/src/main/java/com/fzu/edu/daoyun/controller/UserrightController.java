@@ -34,9 +34,4 @@ public class UserrightController {
     public ReturnBean updateUserRight(Userright userright){
         return ReturnBean.success("成功");
     }
-    @PutMapping("/deleteUserRight")
-    @ApiOperation("删除用户权限")
-    public ReturnBean deleteUserRight(Userright userright){
-        return ReturnBean.success("成功");
-    }
 }

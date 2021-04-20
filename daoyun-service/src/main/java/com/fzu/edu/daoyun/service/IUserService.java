@@ -35,4 +35,14 @@ public interface IUserService extends IService<User> {
     ReturnBean sendCode(String phoneNumber, String code);
 
     ReturnBean loginByCode(UserLogin userLogin);
+
+    User getUserByID(int userID);
+
+    ReturnBean getCodeAndReturn(String phoneNumber);
+
+    ReturnBean sendCodeAndReturn(String phoneNumber,String code);
+
+    ReturnBean updateUserInfo(User user);
+
+    ReturnBean updatePassword(UserLogin userLogin);
 }

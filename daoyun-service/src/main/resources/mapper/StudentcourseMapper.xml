@@ -3,7 +3,7 @@
 <mapper namespace="com.fzu.edu.StudentcourseMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.fzu.edu.daoyun.entity.Studentcourse">
+    <resultMap id="BaseResultMap" type="com.fzu.edu.daoyun.entity.Studentteacou">
         <id column="stuCouID" property="stuCouID" />
         <result column="userID" property="userID" />
         <result column="couID" property="couID" />

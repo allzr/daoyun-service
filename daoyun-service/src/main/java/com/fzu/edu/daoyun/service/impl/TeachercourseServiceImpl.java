@@ -1,5 +1,6 @@
 package com.fzu.edu.daoyun.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fzu.edu.daoyun.entity.Course;
 import com.fzu.edu.daoyun.entity.ReturnBean;
@@ -40,7 +41,7 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
     }
 
     @Override
-    public ReturnBean getTeacherCourseID(Teachercourse teachercourse) {
+    public ReturnBean getTeaCouID(Teachercourse teachercourse) {
         String tmp=String.valueOf(teachercourse.getTeaCouID());
         String id=new String();
         for(int i=tmp.length();i<6;i++){
@@ -51,4 +52,9 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
     }
 
 
+
+    @Override
+    public Teachercourse getTeaCouByTeaCouId(int teacherCourseId) {
+        return teachercourseMapper.selectOne(new QueryWrapper<Teachercourse>().eq("teaCouID", teacherCourseId).eq("openYear",LocalDateTime.now().getYear()));
+    }
 }

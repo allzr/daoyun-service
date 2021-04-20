@@ -1,6 +1,7 @@
 package com.fzu.edu.daoyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.entity.Userright;
 
 /**

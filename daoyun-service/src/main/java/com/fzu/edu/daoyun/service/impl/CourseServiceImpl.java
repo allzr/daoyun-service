@@ -37,18 +37,24 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         if(2!=user.getUserType()){
             return ReturnBean.error("非老师用户无法创建班课");
         }
-        if(null==getCourseByName(course.getName())){
+        Course course1=getCourseByName(course.getName());
+        if(null==course1){
             course.setLastEditTime(LocalDateTime.now());
             course.setLastEditorID(user.getUserID());
             courseMapper.insert(course);
+        }
+        else if(true==course1.getIsDelete())
+        {
+            course1.setLastEditorID(user.getUserID());
+            course1.setLastEditTime(LocalDateTime.now());
+            course1.setIsDelete(false);
         }
         return teachercourseService.create(user,course,year);
     }
 
     @Override
     public ReturnBean deleteCourse(String id) {
-        int id1=Integer.valueOf(id);
-        Course course=getById(id1);
+        Course course=getById(Integer.valueOf(id));
         course.setIsDelete(true);
         courseMapper.updateById(course);
         return ReturnBean.success("删除成功");

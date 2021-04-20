@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -30,9 +32,18 @@ public class Sign implements Serializable {
     @TableId(value = "signID", type = IdType.AUTO)
     private Integer signID;
 
-    @TableField("stuCouID")
-    private Integer stuCouID;
+    @TableField("teaCouID")
+    @ApiModelProperty("记录学生签到信息是保存stuCouID，记录老师发起签到信息时保存teaCouID")
+    private Integer teaCouID;
 
+    @TableField("stuTeaCouID")
+    private Integer stuTeaCouID;
+
+    @TableField("createTime")
+    @ApiModelProperty("记录老师发起签到信息时填写终止时间，前端正常传入createTime")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty("记录老师发起签到信息时填写开始时间，前端正常传入signTime信息")
     @TableField("signTime")
     private LocalDateTime signTime;
 

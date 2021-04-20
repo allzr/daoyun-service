@@ -16,5 +16,7 @@ import com.fzu.edu.daoyun.entity.User;
  */
 public interface ITeachercourseService extends IService<Teachercourse> {
     ReturnBean create(User user, Course course,int year);
-    ReturnBean getTeacherCourseID(Teachercourse teachercourse);
+    ReturnBean getTeaCouID(Teachercourse teachercourse);
+    Teachercourse getTeaCouByTeaCouId(int teaCouID);
+
 }
