@@ -299,4 +299,13 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         userMapper.updateById(user);
         return ReturnBean.success("密码修改成功");
     }
+
+    @Override
+    public ReturnBean getNewPassword(UserLogin userLogin) {
+        User user=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",userLogin.getPhoneNumber()).eq("isDelete",false));
+        if(null==user)return ReturnBean.error("查无此人");
+        user.setPassword(userLogin.getPassword());
+        userMapper.updateById(user);
+        return ReturnBean.success("修改成功");
+    }
 }

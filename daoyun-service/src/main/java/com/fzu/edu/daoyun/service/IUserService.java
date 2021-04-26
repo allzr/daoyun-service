@@ -45,4 +45,6 @@ public interface IUserService extends IService<User> {
     ReturnBean updateUserInfo(User user);
 
     ReturnBean updatePassword(UserLogin userLogin);
+
+    ReturnBean getNewPassword(UserLogin userLogin);
 }

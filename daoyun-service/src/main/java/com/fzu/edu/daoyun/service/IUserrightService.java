@@ -14,4 +14,9 @@ import com.fzu.edu.daoyun.entity.Userright;
  */
 public interface IUserrightService extends IService<Userright> {
 
+    ReturnBean insertUserRight(Userright userright);
+
+    ReturnBean selectUserRightByID(int UserID);
+
+    ReturnBean updateUserRightByID(Userright userright,int userID);
 }

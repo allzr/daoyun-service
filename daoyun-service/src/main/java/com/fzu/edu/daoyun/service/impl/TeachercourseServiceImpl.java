@@ -35,7 +35,7 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
         teachercourse.setUserID(user.getUserID());
         teachercourse.setLastEditorID(user.getUserID());
         teachercourse.setLastEditTime(LocalDateTime.now());
-        teachercourse.setOpenYear(year);
+        teachercourse.setOpenYearAndSeason(year);
         teachercourseMapper.insert(teachercourse);
         return ReturnBean.success("创建成功");
     }
@@ -55,6 +55,6 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
 
     @Override
     public Teachercourse getTeaCouByTeaCouId(int teacherCourseId) {
-        return teachercourseMapper.selectOne(new QueryWrapper<Teachercourse>().eq("teaCouID", teacherCourseId).eq("openYear",LocalDateTime.now().getYear()));
+        return teachercourseMapper.selectOne(new QueryWrapper<Teachercourse>().eq("teaCouID", teacherCourseId).eq("openYearAndSeason",LocalDateTime.now().getYear()));
     }
 }

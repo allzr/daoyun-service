@@ -4,7 +4,9 @@ package com.fzu.edu.daoyun.controller;
 import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.entity.Url;
 import com.fzu.edu.daoyun.entity.Userright;
+import com.fzu.edu.daoyun.service.IUserrightService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,20 +20,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/userright")
 public class UserrightController {
+    @Autowired
+    private IUserrightService userrightService;
+
     @PostMapping("/insertUserRight")
-    @ApiOperation("添加用户权限")
+    @ApiOperation("添加用户权限,创建用户时使用,已实现")
     public ReturnBean insertUserRight(Userright userright)
     {
-        return ReturnBean.success("成功");
+        return userrightService.insertUserRight(userright);
     }
-    @GetMapping("/selectUserRight")
-    @ApiOperation("查询用户权限")
-    public ReturnBean selectUserRight(Userright userright){
-        return ReturnBean.success("成功");
+    @GetMapping("/selectUserRight/{id}")
+    @ApiOperation("查询用户权限,已实现,请在URL上附带要查询的user的ID")
+    public ReturnBean selectUserRight(@PathVariable int userID){
+        return userrightService.selectUserRightByID(userID);
     }
-    @PutMapping("/updateUserRight")
-    @ApiOperation("修改用户权限")
-    public ReturnBean updateUserRight(Userright userright){
-        return ReturnBean.success("成功");
+    @PutMapping("/updateUserRight/user/{userID}")
+    @ApiOperation("修改用户权限,已实现，请在URL上附带修改执行人的ID")
+    public ReturnBean updateUserRight(Userright userright, @PathVariable int userID){
+        return userrightService.updateUserRightByID(userright,userID);
     }
 }

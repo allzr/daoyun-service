@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -36,7 +37,8 @@ public class Teachercourse implements Serializable {
     @TableField("userID")
     private Integer userID;
 
-    private Integer openYear;
+    @ApiModelProperty("年份+学期，春季学期记为1，秋季学期记为2")
+    private Integer openYearAndSeason;
 
     @TableField("lastEditTime")
     private LocalDateTime lastEditTime;

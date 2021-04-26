@@ -1,6 +1,7 @@
 package com.fzu.edu.daoyun.controller;
 
 
+import com.fzu.edu.daoyun.config.security.JwtTokenUtils;
 import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.entity.User;
 import com.fzu.edu.daoyun.entity.UserLogin;
@@ -10,9 +11,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Reference;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
@@ -31,7 +34,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
-
+    @Resource
+    public HttpServletRequest request;
 
     @PostMapping("/loginByPassword")
     @ApiOperation(value = "密码登录，已实现")
@@ -98,5 +102,11 @@ public class UserController {
         return userService.deleteUser(phoneNumber);
     }
 
+    @PostMapping("/changePassword")
+    @ApiOperation(value="修改密码,需要token，已实现")
+    public ReturnBean changePassword(@RequestBody UserLogin userLogin){
+        request.getHeader("Athor");
+        return userService.getNewPassword(userLogin);
+    }
 
 }

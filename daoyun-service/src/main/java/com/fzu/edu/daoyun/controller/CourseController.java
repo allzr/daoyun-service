@@ -32,9 +32,9 @@ public class CourseController {
 
     @PostMapping("/create")
     @ApiOperation("创建班课，已实现")
-    public ReturnBean createCourse(Principal principal, Course course ,@RequestParam(value = "开学年份") int year)
+    public ReturnBean createCourse(Principal principal,@RequestBody  Course course ,@RequestBody int openYear)
     {
-        return courseService.createCourse(userService.getUserByUsername(principal.getName()),course,year);
+        return courseService.createCourse(userService.getUserByUsername(principal.getName()),course,openYear);
     }
     @PutMapping("/delete/{id}")
     @ApiOperation("删除班课，已实现")
