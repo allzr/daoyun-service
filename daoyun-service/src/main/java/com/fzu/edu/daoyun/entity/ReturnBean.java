@@ -21,6 +21,13 @@ public class ReturnBean {
     public static ReturnBean success(String message,Object obj){
         return new ReturnBean(200,message, obj);
     }
+    public static ReturnBean success202(String message){
+        return new ReturnBean(202,message,null);
+    }
+
+    public static ReturnBean success202(String message,Object obj){
+        return new ReturnBean(202,message, obj);
+    }
     public static ReturnBean error(String message, Object obj){
         return new ReturnBean(500,message, obj);
     }

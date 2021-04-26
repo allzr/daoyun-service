@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.fzu.edu.daoyun.util.md5Str;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -79,20 +80,30 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
 
     @Override
     public ReturnBean loginByCode(UserLogin userLogin) {
+        System.out.println(userLogin.getPassword());
         String phoneNumber=userLogin.getPhoneNumber();
         String password=userLogin.getPassword();
-        System.out.println(userLogin.getPhoneNumber());
-        System.out.println(userLogin.getPassword());
         if(null==phoneNumber) return ReturnBean.error("手机号不能为空");
         if(6!=password.length()) return ReturnBean.error("验证码不正确");
-        if(!CodeSave.compCode(phoneNumber,password)) {
-            return ReturnBean.error("验证码不正确");
-        }
+        if(!CodeSave.compCode(phoneNumber,password)) return ReturnBean.error("验证码不正确");
         User user=getUserByPhoneNumber(phoneNumber);
-        if(null==user)
-            user=getUserByEmail(phoneNumber);
-        if(null==user)
-            return ReturnBean.error("用户不存在");
+        if(null==user) {
+            User user1=new User();
+            user1.setPhoneNumber(phoneNumber);
+            user1.setIsDelete(false);
+            user1.setUsername(phoneNumber);
+            user1.setPassword(md5Str.getMD5Str(phoneNumber));
+            user1.setCreateTime(LocalDateTime.now());
+            user1.setLastLoginTime(LocalDateTime.now());
+            userMapper.insert(user1);
+            UsernamePasswordAuthenticationToken authenticationToken =new UsernamePasswordAuthenticationToken(user1,null,user1.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            String token1=jwtTokenUtils.generateToken(user1);
+            Map<String ,String> tokenMap = new HashMap<>();
+            tokenMap.put("token",tokenHead+" "+token1);
+            return ReturnBean.success202("快速注册成功",tokenMap);
+        }
 
         UsernamePasswordAuthenticationToken authenticationToken =new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -105,7 +116,6 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         user=getUserByPhoneNumber(phoneNumber);
         user.setLastLoginTime(LocalDateTime.now());
         userMapper.updateById(user);
-        logintimeService.insertLoginTime(user,LocalDateTime.now(),1);
         return ReturnBean.success("登陆成功",tokenMap);
     }
 
@@ -129,6 +139,27 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         user.setCreateTime(LocalDateTime.now());
         userMapper.insert(user);
         return ReturnBean.success("注册成功");
+    }
+
+    @Override
+    public ReturnBean updateUserInfo(User user) {
+        User tmp=getUserByPhoneNumber(user.getPhoneNumber());
+        if(null!=user.getPassword()) tmp.setPassword(user.getPassword());
+        if(null!=user.getRealName()) tmp.setRealName(user.getRealName());
+        if(null!=user.getUsername()) tmp.setUsername(user.getUsername());
+        if(null!=user.getBlogID()) tmp.setBlogID(user.getBlogID());
+        if(null!=user.getQqid()) tmp.setQqid(user.getQqid());
+        if(null!=user.getBornYear()) tmp.setBornYear(user.getBornYear());
+        if(null!=user.getBornMonth()) tmp.setBornMonth(user.getBornMonth());
+        if(null!=user.getUserType()) tmp.setUserType(user.getUserType());
+        if(null!=user.getCollegeName()) tmp.setCollegeName(user.getCollegeName());
+        if(null!=user.getSchoolName()) tmp.setSchoolName(user.getSchoolName());
+        if(null!=user.getEmail()) tmp.setEmail(user.getEmail());
+        if(null!=user.getStuTeaAdmNumber()) tmp.setStuTeaAdmNumber(user.getStuTeaAdmNumber());
+        if(-1!=user.getSex()) tmp.setSex(user.getSex());
+        if(-1!=user.getExp()) tmp.setExp(user.getExp());
+        tmp.setIsDelete(false);
+        return ReturnBean.success("修改成功");
     }
 
     @Override
@@ -270,14 +301,7 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         return  ReturnBean.success("发送成功",code);
     }
 
-    @Override
-    public ReturnBean updateUserInfo(User user) {
-        if(null!=user.getUserID())
-            userMapper.updateById(user);
-        user=getUserByPhoneNumber(user.getPhoneNumber());
-        userMapper.updateById(user);
-        return ReturnBean.success("更新成功");
-    }
+
 
     @Override
     public ReturnBean updatePassword(UserLogin userLogin) {
