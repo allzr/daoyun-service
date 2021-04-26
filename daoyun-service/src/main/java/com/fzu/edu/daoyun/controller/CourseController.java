@@ -3,11 +3,13 @@ package com.fzu.edu.daoyun.controller;
 
 import com.fzu.edu.daoyun.entity.Course;
 import com.fzu.edu.daoyun.entity.ReturnBean;
+import com.fzu.edu.daoyun.entity.User;
 import com.fzu.edu.daoyun.service.impl.CourseServiceImpl;
 import com.fzu.edu.daoyun.service.impl.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -33,7 +35,12 @@ public class CourseController {
     @PostMapping("/create")
     @ApiOperation("创建班课，已实现")
     public ReturnBean createCourse(Principal principal,@RequestBody  Course course ,@RequestBody int openYear)
+
     {
+
+        //User principal1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
         return courseService.createCourse(userService.getUserByUsername(principal.getName()),course,openYear);
     }
     @PutMapping("/delete/{id}")

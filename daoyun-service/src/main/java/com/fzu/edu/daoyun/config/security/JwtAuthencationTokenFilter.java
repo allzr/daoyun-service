@@ -32,6 +32,8 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
     private JwtTokenUtils jwtTokenUtils;
     @Autowired
     private IUserService userService;
+    @Value("${jwt.gitTokenHeader}")
+    private String gitTokenHeader;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -53,8 +55,16 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    
                 }
+            }
+        }
+        else if(null==authHeader){
+            authHeader=httpServletRequest.getHeader(gitTokenHeader);
+            User user=userService.getUserByGithubToken(authHeader);
+            if(null!=authHeader){
+                UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);

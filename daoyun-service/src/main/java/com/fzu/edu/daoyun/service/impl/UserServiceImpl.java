@@ -147,8 +147,9 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         if(null!=user.getPassword()) tmp.setPassword(user.getPassword());
         if(null!=user.getRealName()) tmp.setRealName(user.getRealName());
         if(null!=user.getUsername()) tmp.setUsername(user.getUsername());
-        if(null!=user.getBlogID()) tmp.setBlogID(user.getBlogID());
-        if(null!=user.getQqid()) tmp.setQqid(user.getQqid());
+        if(null!=user.getGithubID()) tmp.setGithubID(user.getGithubID());
+        if(null!=user.getGithubToken()) tmp.setGithubToken(user.getGithubToken());
+        if(null!=user.getGithubTokenDeadtime()) tmp.setGithubTokenDeadtime(user.getGithubTokenDeadtime());
         if(null!=user.getBornYear()) tmp.setBornYear(user.getBornYear());
         if(null!=user.getBornMonth()) tmp.setBornMonth(user.getBornMonth());
         if(null!=user.getUserType()) tmp.setUserType(user.getUserType());
@@ -325,5 +326,20 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
     @Override
     public ReturnBean githubLogin(String code) {
         return null;
+    }
+
+    @Override
+    public void insert(User user) {
+        userMapper.insert(user);
+    }
+
+    @Override
+    public User getUserByGithubToken(String githubToken) {
+        User user=userMapper.selectOne(new QueryWrapper<User>().eq("githubToken",githubToken));
+        if(null==user)
+            return null;
+        if(user.getGithubTokenDeadtime().isBefore(LocalDateTime.now()))
+            return null;
+        return user;
     }
 }

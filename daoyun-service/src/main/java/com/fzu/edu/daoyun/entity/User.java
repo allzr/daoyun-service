@@ -73,17 +73,20 @@ public class User implements Serializable, UserDetails {
     @TableField("EXP")
     private Integer exp;
 
-    @ApiModelProperty("第三方登录对应QQ")
-    @TableField("QQID")
-    private String qqid;
+    @ApiModelProperty("githubToken过期时间")
+    @TableField("githubTokenDeadtime")
+    private LocalDateTime githubTokenDeadtime;
 
     @ApiModelProperty("邮箱，必填")
     @TableField("email")
     private String email;
 
-    @ApiModelProperty("第三方登录对应微博")
-    @TableField("blogID")
-    private String blogID;
+    @ApiModelProperty("githubToken")
+    @TableField("githubToken")
+    private String githubToken;
+
+    @TableField("githubID")
+    private String githubID;
 
     @TableField("schoolName")
     private String schoolName;

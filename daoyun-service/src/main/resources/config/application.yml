@@ -2,13 +2,13 @@ server:
   port: 8081
 
 spring:
-  devtools:
-    restart:
-      enabled: true  #设置开启热部署
-      additional-paths: src/main/java #重启目录
-      exclude: WEB-INF/**
-  freemarker:
-    cache: false    #页面不加载缓存，修改即时生效
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: a29c**************填自己的******774c6c9
+            clientSecret: b610b184************填自己的******d75f143297
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -35,6 +35,7 @@ logging:
 
 jwt:
   tokenHeader: Authorization
+  gitTokenHeader: gitToken
   secret: daoyun-secret
   expiration: 604800
   tokenHead: Bearer
