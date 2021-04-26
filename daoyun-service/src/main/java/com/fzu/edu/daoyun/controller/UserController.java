@@ -13,8 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Reference;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -34,6 +34,7 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
     @Resource
     public HttpServletRequest request;
 
@@ -105,8 +106,9 @@ public class UserController {
     @PostMapping("/changePassword")
     @ApiOperation(value="修改密码,需要token，已实现")
     public ReturnBean changePassword(@RequestBody UserLogin userLogin){
-        request.getHeader("Athor");
+        //request.getHeader("Athor");
         return userService.getNewPassword(userLogin);
     }
+
 
 }

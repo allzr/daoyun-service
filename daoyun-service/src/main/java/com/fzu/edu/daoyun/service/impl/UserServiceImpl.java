@@ -1,7 +1,6 @@
 package com.fzu.edu.daoyun.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fzu.edu.daoyun.config.security.JwtTokenUtils;
 import com.fzu.edu.daoyun.entity.*;
@@ -10,28 +9,18 @@ import com.fzu.edu.daoyun.service.IUserService;
 import com.fzu.edu.daoyun.util.CodeSave;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.common.profile.ClientProfile;
-import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
-import net.bytebuddy.asm.Advice;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.crypto.Data;
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -307,5 +296,10 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         user.setPassword(userLogin.getPassword());
         userMapper.updateById(user);
         return ReturnBean.success("修改成功");
+    }
+
+    @Override
+    public ReturnBean githubLogin(String code) {
+        return null;
     }
 }

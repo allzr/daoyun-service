@@ -6,8 +6,6 @@ import com.fzu.edu.daoyun.entity.User;
 import com.fzu.edu.daoyun.entity.UserLogin;
 import com.fzu.edu.daoyun.entity.UserRegiser;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * <p>
  *  服务类
@@ -47,4 +45,6 @@ public interface IUserService extends IService<User> {
     ReturnBean updatePassword(UserLogin userLogin);
 
     ReturnBean getNewPassword(UserLogin userLogin);
+
+    ReturnBean githubLogin(String code);
 }
