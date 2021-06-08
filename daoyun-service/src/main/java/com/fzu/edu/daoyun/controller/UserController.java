@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Reference;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -78,7 +79,7 @@ public class UserController {
     @PutMapping("/insert")
     @ApiOperation(value = "添加用户，已实现")
     public ReturnBean insert(@RequestBody  User user){
-        return ReturnBean.success("添加成功");
+        return userService.insert(user);
     }
 
     @GetMapping("/logout")
@@ -110,5 +111,12 @@ public class UserController {
         return userService.getNewPassword(userLogin);
     }
 
+    @GetMapping("/getInfo")
+    @ApiOperation(value = "根据token获取用户信息")
+    public ReturnBean getUserInfo(Principal principal){
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println(principal);
+        return ReturnBean.success("返回成功",SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
 
 }

@@ -329,8 +329,9 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
     }
 
     @Override
-    public void insert(User user) {
+    public ReturnBean insert(User user) {
         userMapper.insert(user);
+        return ReturnBean.success("插入成功");
     }
 
     @Override
@@ -339,6 +340,14 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         if(null==user)
             return null;
         if(user.getGithubTokenDeadtime().isBefore(LocalDateTime.now()))
+            return null;
+        return user;
+    }
+
+    @Override
+    public User getUserByGithubID(String id) {
+        User user=userMapper.selectOne(new QueryWrapper<User>().eq("githubID",id));
+        if(null==user)
             return null;
         return user;
     }

@@ -12,13 +12,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
-    public static String doGet(String url) throws Exception{
+    public static String doGetToken(String url,String token) throws Exception{
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
         HttpGet httpGet = new HttpGet(url);
+        httpGet.setHeader("Authorization","token "+token);
         // 发送了一个http请求
         CloseableHttpResponse response = httpclient.execute(httpGet);
+        System.out.println(response.getStatusLine().getStatusCode());
+        // 如果响应200成功,解析响应结果
+        if(response.getStatusLine().getStatusCode()==200){
+            // 获取响应的内容
+            HttpEntity responseEntity = response.getEntity();
+
+            return EntityUtils.toString(responseEntity);
+        }
+        return null;
+    }
+
+    public static String doGet(String url) throws Exception{
+
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet(url);
+        // 发送了一个http请求
+        CloseableHttpResponse response = httpclient.execute(httpGet);
+        System.out.println(response.getStatusLine().getStatusCode());
         // 如果响应200成功,解析响应结果
         if(response.getStatusLine().getStatusCode()==200){
             // 获取响应的内容
@@ -63,6 +82,8 @@ public class HttpClient {
         Map<String, String> map = new HashMap<>();
         // 阿里巴巴fastjson  将json转换成map
         JSONObject jsonObject = JSONObject.parseObject(responseEntity);
+        if(null==jsonObject)
+            return map;
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
             String key = entry.getKey();
             // 将obj转换成string
