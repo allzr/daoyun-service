@@ -2,19 +2,11 @@ server:
   port: 8081
 
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            clientId: a29c**************填自己的******774c6c9
-            clientSecret: b610b184************填自己的******d75f143297
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/daoyun?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=Asia/Shanghai
     username: root
-    password: root
+    password: xgsdeQQ123
     hikari:
       pool-name: DataHikariCP
       minimum-idle: 5

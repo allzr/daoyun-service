@@ -48,7 +48,9 @@ public interface IUserService extends IService<User> {
 
     ReturnBean githubLogin(String code);
 
-    void insert(User user);
+    ReturnBean insert(User user);
 
     User getUserByGithubToken(String githubToken);
+
+    User getUserByGithubID(String id);
 }

@@ -3,6 +3,9 @@ package com.fzu.edu.daoyun.config.security;
 
 import com.fzu.edu.daoyun.entity.User;
 import com.fzu.edu.daoyun.service.IUserService;
+import com.fzu.edu.daoyun.util.GitHubConstant;
+import com.fzu.edu.daoyun.util.HttpClient;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
 
@@ -35,6 +39,7 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.gitTokenHeader}")
     private String gitTokenHeader;
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         HttpServletResponse response = (HttpServletResponse) httpServletResponse;
@@ -58,11 +63,14 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
                 }
             }
         }
-        else if(null==authHeader){
-            authHeader=httpServletRequest.getHeader(gitTokenHeader);
-            User user=userService.getUserByGithubToken(authHeader);
-            if(null!=authHeader){
-                UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+        else if(null!=authHeader){
+            String userinfo_url = GitHubConstant.USER_INFO_URL;
+            userinfo_url = HttpClient.doGetToken(userinfo_url,authHeader);//json
+            Map<String, String> responseMap = HttpClient.getMapByJson(userinfo_url);
+            User tmp = userService.getUserByPhoneNumber(responseMap.get("id"));
+            if(null!=tmp)
+            {
+                UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(tmp,null,tmp.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }

@@ -41,7 +41,7 @@ public class CourseController {
         //User principal1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
-        return courseService.createCourse(userService.getUserByUsername(principal.getName()),course,openYear);
+        return courseService.createCourse(userService.getUserByPhoneNumber(principal.getName()),course,openYear);
     }
     @PutMapping("/delete/{id}")
     @ApiOperation("删除班课，已实现")
