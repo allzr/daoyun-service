@@ -41,12 +41,12 @@ public class DatadicController {
     @PostMapping("/selectIdByKey/{key}")
     @ApiOperation("通过Key查询ID，已实现")
     public ReturnBean selectIdByName(@PathVariable String key){
-        return ReturnBean.success("查询成功",datadicService.getDatadicByKey(key).getDataDicID());
+        return datadicService.selectDatadicByKey(key);
     }
 
     @PutMapping("/deleteDic/{dataDicId}/user/{userID}")
     @ApiOperation("通过ID删除字典条目，已实现")
     public ReturnBean deleteDic(@PathVariable int dataDicId, @PathVariable int userID){
-        return deleteDic(dataDicId,userID);
+        return datadicService.deleteDatadic(dataDicId,userID);
     }
 }

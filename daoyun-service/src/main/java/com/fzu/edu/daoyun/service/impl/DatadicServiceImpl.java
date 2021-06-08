@@ -31,7 +31,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
 
     @Override
     public ReturnBean insertDatadic(Datadic datadic, int userID) {
-        Datadic tmp=getDatadicByKey(datadic.getDataKey());
+        Datadic tmp=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataKey",datadic).eq("isDelete",false));
         if(null!=tmp&&false==tmp.getIsDelete())
             ReturnBean.error("该数据已存在");
         datadic.setCreateTime(LocalDateTime.now());
@@ -61,7 +61,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
 
     @Override
     public ReturnBean selectDatadicByKey(String key) {
-        Datadic datadic=getDatadicByKey(key);
+        Datadic datadic=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataKey",key).eq("isDelete",false));
         if(null==datadic)
             return ReturnBean.error("查找无结果");
         return ReturnBean.success("查找成功",datadic);
@@ -85,10 +85,5 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
         tmp.setLastEditTime(LocalDateTime.now());
         datadicMapper.updateById(tmp);
         return ReturnBean.success("删除成功");
-    }
-
-    @Override
-    public Datadic getDatadicByKey(String DatadicKey){
-        return datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataKey",DatadicKey).eq("isDelete",false));
     }
 }

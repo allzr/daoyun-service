@@ -23,6 +23,4 @@ public interface IDatadicService extends IService<Datadic> {
     ReturnBean selectAll();
 
     ReturnBean deleteDatadic(int DatadicID, int userID);
-
-    public Datadic getDatadicByKey(String DatadicKey);
 }
