@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Xing
@@ -24,30 +24,26 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="Teachercourse对象", description="")
-public class Teachercourse implements Serializable {
+public class Sysparameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "teaCouID", type = IdType.AUTO)
-    private Integer teaCouID;
+    @TableId(value = "sysParameterID", type = IdType.AUTO)
+    private Integer sysParameterID;
 
-    @TableField("couID")
-    private Integer couID;
+    @TableField("Chinesekey")
+    private String ChineseKey;
 
-    @TableField("userID")
-    private Integer userID;
+    @TableField("Englishkey")
+    private String EnglishKey;
 
-    @ApiModelProperty("年份+学期，春季学期记为1，秋季学期记为2")
-    private Integer openYear;
+    @TableField("value")
+    private String value;
+
 
     @TableField("lastEditTime")
     private LocalDateTime lastEditTime;
 
     @TableField("lastEditorID")
     private Integer lastEditorID;
-
-    @TableField("createTime")
-    private LocalDateTime createTime;
-
-    private String classId;
 }

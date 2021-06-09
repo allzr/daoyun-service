@@ -7,6 +7,7 @@ import com.fzu.edu.daoyun.entity.Datadicdetail;
 import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.mapper.DatadicdetailMapper;
 import com.fzu.edu.daoyun.service.IDatadicdetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatadicdetailServiceImpl extends ServiceImpl<DatadicdetailMapper, Datadicdetail> implements IDatadicdetailService {
 
+    @Autowired
     private DatadicdetailMapper datadicdetailMapper;
 
     @Override
@@ -36,27 +38,39 @@ public class DatadicdetailServiceImpl extends ServiceImpl<DatadicdetailMapper, D
         Datadicdetail tmp=datadicdetailMapper.selectById(id);
         if(null==tmp)
             return ReturnBean.error("该条目不存在");
-
-        return null;
+        datadicdetailMapper.deleteById(id);
+        return ReturnBean.success("删除成功");
     }
 
     @Override
     public ReturnBean selectDatadicdetailById(int id) {
-        return null;
+        Datadicdetail tmp=datadicdetailMapper.selectById(id);
+        if(null==tmp)
+            return ReturnBean.error("该条目不存在");
+        return ReturnBean.success("查询成功",tmp);
     }
 
     @Override
     public ReturnBean selectAll() {
-        return null;
+        return ReturnBean.success("查询成功",datadicdetailMapper.selectList(new QueryWrapper<Datadicdetail>()));
     }
 
     @Override
     public ReturnBean selectDataDicdetailByDatadicId(int DatadicId) {
-        return null;
+        return ReturnBean.success("查询成功",datadicdetailMapper.selectList(new QueryWrapper<Datadicdetail>().eq("dataDicID",DatadicId)));
     }
 
     @Override
-    public ReturnBean updateDatadicdetail(Datadicdetail datadicdetail) {
-        return null;
+    public ReturnBean updateDatadicdetailByID(Datadicdetail datadicdetail) {
+        datadicdetailMapper.updateById(datadicdetail);
+        return ReturnBean.success("更新成功");
+    }
+
+    @Override
+    public ReturnBean selectIdByDataDicIDandDataValue(int DataDicID, String DataValue) {
+        Datadicdetail tmp=datadicdetailMapper.selectOne(new QueryWrapper<Datadicdetail>().eq("dataDicID",DataDicID).eq("dataValue",DataValue));
+        if(null==tmp)
+            return ReturnBean.error("该条目不存在");
+        return ReturnBean.success("查询成功",tmp);
     }
 }

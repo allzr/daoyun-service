@@ -4,7 +4,9 @@ package com.fzu.edu.daoyun.controller;
 import com.fzu.edu.daoyun.entity.Datadic;
 import com.fzu.edu.daoyun.entity.Datadicdetail;
 import com.fzu.edu.daoyun.entity.ReturnBean;
+import com.fzu.edu.daoyun.service.IDatadicdetailService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,24 +20,41 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/datadicdetail")
 public class DatadicdetailController {
+
+    @Autowired
+    private IDatadicdetailService datadicdetailService;
+
     @PostMapping("insertDicDetail")
-    @ApiOperation("增加字典细节条目")
-    public ReturnBean insertDicDetial(Datadicdetail datadicdetail){
-        return ReturnBean.success("成功");
+    @ApiOperation("增加字典细节条目,已实现")
+    public ReturnBean insertDicDeaial(@RequestBody Datadicdetail datadicdetail){
+        return datadicdetailService.insertDatadicdetail(datadicdetail);
     }
-    @GetMapping("/selectDicDetail")
-    @ApiOperation("查询字典细节条目")
-    public ReturnBean selectDicDetial(Datadicdetail datadicdetail){
-        return ReturnBean.success("成功");
+    @GetMapping("/selectDicDetailAll")
+    @ApiOperation("查询所有字典细节条目,已实现")
+    public ReturnBean selectDicDetail(){
+        return datadicdetailService.selectAll();
     }
-    @PutMapping("/updateDicDetail")
-    @ApiOperation("删除字典细节条目")
-    public ReturnBean updateDicDetial(Datadicdetail datadicdetail){
-        return ReturnBean.success("成功");
+
+    @GetMapping("/selectDicDetailAllById/{id}")
+    @ApiOperation("根据id查询字典细节条目,已实现")
+    public ReturnBean selectDicDetailByDatadicId(@PathVariable String id){
+        return datadicdetailService.selectDataDicdetailByDatadicId(Integer.valueOf(id));
     }
-    @PutMapping("/deleteDicDetail")
-    @ApiOperation("删除字典细节条目")
-    public ReturnBean deleteDicDetial(Datadicdetail datadicdetail){
-        return ReturnBean.success("成功");
+
+    @PostMapping("/updateDicDetail")
+    @ApiOperation("通过ID更新字典细节条目,已实现")
+    public ReturnBean updateDicDetail(@RequestBody Datadicdetail datadicdetail){
+        return datadicdetailService.updateDatadicdetailByID(datadicdetail);
+    }
+    @PutMapping("/deleteDicDetail/{id}")
+    @ApiOperation("删除字典细节条目,已实现")
+    public ReturnBean deleteDicDetail(@PathVariable int id){
+        return datadicdetailService.deleteDatadicdetail(id);
+    }
+
+    @GetMapping("/selectDicDetailByDicIdAndDataValue")
+    @ApiOperation("通过DicId和DataValue组合查询DicDetail,已实现")
+    public ReturnBean selectDicDetailByDicIdAndDataValue(@RequestBody Datadicdetail datadicdetail){
+        return datadicdetailService.selectIdByDataDicIDandDataValue(datadicdetail.getDataDicID(),datadicdetail.getDataValue());
     }
 }

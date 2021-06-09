@@ -114,9 +114,14 @@ public class UserController {
     @GetMapping("/getInfo")
     @ApiOperation(value = "根据token获取用户信息")
     public ReturnBean getUserInfo(Principal principal){
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println(principal);
+        //System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        //System.out.println(principal);
         return ReturnBean.success("返回成功",SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
+    @PostMapping("/updateUserInfo")
+    @ApiOperation(value="修改用户信息")
+    public ReturnBean updateUserInfo(@RequestBody User user){
+        return userService.updateUserInfo(user);
+    }
 }

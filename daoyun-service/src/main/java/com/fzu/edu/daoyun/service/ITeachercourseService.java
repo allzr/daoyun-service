@@ -6,6 +6,9 @@ import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.entity.Teachercourse;
 import com.fzu.edu.daoyun.entity.User;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -18,5 +21,5 @@ public interface ITeachercourseService extends IService<Teachercourse> {
     ReturnBean create(User user, Course course,int year);
     ReturnBean getTeaCouID(Teachercourse teachercourse);
     Teachercourse getTeaCouByTeaCouId(int teaCouID);
-
+    List<Map<String , String>> getTeaCouByUserId(int userId);
 }

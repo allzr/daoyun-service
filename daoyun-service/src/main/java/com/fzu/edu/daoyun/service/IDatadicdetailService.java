@@ -23,5 +23,7 @@ public interface IDatadicdetailService extends IService<Datadicdetail> {
 
     ReturnBean selectDataDicdetailByDatadicId(int DatadicId);
 
-    ReturnBean updateDatadicdetail(Datadicdetail datadicdetail);
+    ReturnBean updateDatadicdetailByID(Datadicdetail datadicdetail);
+
+    ReturnBean selectIdByDataDicIDandDataValue(int DataDicID,String DataValue);
 }

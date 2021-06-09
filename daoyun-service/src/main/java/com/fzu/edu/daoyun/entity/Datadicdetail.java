@@ -48,5 +48,4 @@ public class Datadicdetail implements Serializable {
     @TableField("lastEditorID")
     private Integer lastEditorID;
 
-
 }

@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,30 +24,30 @@ class DaoyunApplicationTests {
 
     private UserMapper mapper;
 
-    @BeforeEach
-    public void before() throws IOException {
-        String resource = "config/mybatis-config.xml";
-        // 读取配置文件
-        InputStream inputStream = Resources.getResourceAsStream(resource);
-        // 构建sqlSessionFactory
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-        // 获取sqlSession
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-        System.out.println(211111);
-        mapper = sqlSession.getMapper(UserMapper.class);
-
-    }
+//    @BeforeEach
+//    public void before() throws IOException {
+//        String resource = "config/mybatis-config.xml";
+//        // 读取配置文件
+//        InputStream inputStream = Resources.getResourceAsStream(resource);
+//        // 构建sqlSessionFactory
+//        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+//        // 获取sqlSession
+//        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+//        System.out.println(211111);
+//        mapper = sqlSession.getMapper(UserMapper.class);
+//
+//    }
 
     @Test
-    void contextLoads(){
-        User user=new User();
-        user.setUsername("zhangsan");
-        user.setUserType(1);
-        user.setPassword("12345");
-        user.setRealName("张三");
-        UserController userController=new UserController();
-        System.out.println(user);
-
+    public void contextLoads(){
+//        User user=new User();
+//        user.setUsername("zhangsan");
+//        user.setUserType(1);
+//        user.setPassword("12345");
+//        user.setRealName("张三");
+//        UserController userController=new UserController();
+//        System.out.println(user);
+        System.out.println(UUID.randomUUID());
     }
 
 }

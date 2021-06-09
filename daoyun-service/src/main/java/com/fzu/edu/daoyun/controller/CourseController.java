@@ -11,7 +11,7 @@ import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
+import com.fzu.edu.daoyun.entity.Banke;
 import java.security.Principal;
 
 /**
@@ -34,20 +34,27 @@ public class CourseController {
 
     @PostMapping("/create")
     @ApiOperation("创建班课，已实现")
-    public ReturnBean createCourse(Principal principal,@RequestBody  Course course ,@RequestBody int openYear)
-
+    public ReturnBean createCourse(@RequestBody Banke banKe)
     {
 
         //User principal1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-
-        return courseService.createCourse(userService.getUserByPhoneNumber(principal.getName()),course,openYear);
+        User tmp=(User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return courseService.createCourse(tmp, banKe.getCourse(), Integer.valueOf(banKe.getOpenYear()));
     }
     @PutMapping("/delete/{id}")
     @ApiOperation("删除班课，已实现")
     public ReturnBean deleteCourse(@PathVariable String id){
         return courseService.deleteCourse(id);
     }
+
+    @GetMapping("selectById/{id}")
+    @ApiOperation("根据用户ID查询班课")
+    public ReturnBean selectCourseById(@PathVariable String id){
+        return courseService.selectCourseById(id);
+    }
+
+
+
     @PutMapping("/update")
     @ApiOperation("修改班课")
     public ReturnBean updateCourse(Course course){
@@ -59,3 +66,5 @@ public class CourseController {
         return ReturnBean.success("成功");
     }
 }
+
+

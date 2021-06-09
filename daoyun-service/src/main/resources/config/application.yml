@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/daoyun?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=Asia/Shanghai
     username: root
-    password: xgsdeQQ123
+    password: root
     hikari:
       pool-name: DataHikariCP
       minimum-idle: 5

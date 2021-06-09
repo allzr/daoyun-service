@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * <p>
@@ -26,6 +27,10 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
 
     @Autowired
     private TeachercourseMapper teachercourseMapper;
+    @Autowired
+    private CourseServiceImpl courseService;
+    @Autowired
+    private UserServiceImpl userService;
 
     @Override
     public ReturnBean create(User user, Course course,int year){
@@ -35,9 +40,18 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
         teachercourse.setUserID(user.getUserID());
         teachercourse.setLastEditorID(user.getUserID());
         teachercourse.setLastEditTime(LocalDateTime.now());
-        teachercourse.setOpenYearAndSeason(year);
+        teachercourse.setOpenYear(year);
+        String classID="";
+        Random random = new Random();
+        do {
+            classID="";
+            for (int i = 0; i < 8; i++) {
+                classID += random.nextInt(10);
+            }
+        }while(null!=teachercourseMapper.selectOne(new QueryWrapper<Teachercourse>().eq("ClassID",classID)));
+        teachercourse.setClassId(classID);
         teachercourseMapper.insert(teachercourse);
-        return ReturnBean.success("创建成功");
+        return ReturnBean.success("创建成功",teachercourse);
     }
 
     @Override
@@ -55,6 +69,24 @@ public class TeachercourseServiceImpl extends ServiceImpl<TeachercourseMapper, T
 
     @Override
     public Teachercourse getTeaCouByTeaCouId(int teacherCourseId) {
-        return teachercourseMapper.selectOne(new QueryWrapper<Teachercourse>().eq("teaCouID", teacherCourseId).eq("openYearAndSeason",LocalDateTime.now().getYear()));
+        return teachercourseMapper.selectOne(new QueryWrapper<Teachercourse>().eq("teaCouID", teacherCourseId));
+    }
+
+    @Override
+    public List<Map<String , String>> getTeaCouByUserId(int userId) {
+        List<Teachercourse> tmp=teachercourseMapper.selectList(new QueryWrapper<Teachercourse>().eq("userID", userId));
+        List<Map<String , String>> res=new ArrayList<>();
+        for(int i=0;i<tmp.size();i++) {
+            HashMap<String, String> res1 = new HashMap<>();
+            res1.put("classID", tmp.get(i).getClassId());
+            res1.put("id",tmp.get(i).getTeaCouID().toString());
+            res1.put("className", courseService.getCourseNameById(tmp.get(i).getCouID()));
+            User user = userService.getUserByID(tmp.get(i).getUserID());
+            res1.put("teacherName", user.getUsername());
+            res1.put("createTime", tmp.get(i).getOpenYear().toString());
+            res.add(res1);
+        }
+
+        return res;
     }
 }

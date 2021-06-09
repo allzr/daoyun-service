@@ -33,7 +33,11 @@ public class Datadic implements Serializable {
     private Integer dataDicID;
 
     @ApiModelProperty(value = "字典Key，必填")
-    private String dataKey;
+    private String dataChineseKey;
+
+    @ApiModelProperty(value = "字典Key，必填")
+    private String dataEnglishKey;
+
 
     @TableField("createTime")
     @ApiModelProperty(value = "不填")
@@ -49,6 +53,5 @@ public class Datadic implements Serializable {
 
     @ApiModelProperty(value = "不填")
     private Boolean isDelete;
-
 
 }

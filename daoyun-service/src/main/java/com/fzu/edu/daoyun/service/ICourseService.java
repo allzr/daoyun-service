@@ -18,4 +18,10 @@ public interface ICourseService extends IService<Course> {
     ReturnBean createCourse(User user, Course course, int year);
 
     ReturnBean deleteCourse(String id);
+
+    ReturnBean selectCourseById(String id);
+
+    Course getCourseByName(String name);
+
+    String getCourseNameById(int id);
 }

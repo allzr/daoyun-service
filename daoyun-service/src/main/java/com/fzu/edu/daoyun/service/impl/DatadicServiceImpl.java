@@ -31,7 +31,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
 
     @Override
     public ReturnBean insertDatadic(Datadic datadic, int userID) {
-        Datadic tmp=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataKey",datadic).eq("isDelete",false));
+        Datadic tmp=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataChineseKey",datadic).eq("isDelete",false));
         if(null!=tmp&&false==tmp.getIsDelete())
             ReturnBean.error("该数据已存在");
         datadic.setCreateTime(LocalDateTime.now());
@@ -50,9 +50,9 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
         Datadic tmp=datadicMapper.selectById(datadic.getDataDicID());
         if(null==tmp||true==tmp.getIsDelete())
             return ReturnBean.error("该数据不存在");
-        if(null==datadic.getDataKey())
+        if(null==datadic.getDataChineseKey())
             return ReturnBean.error("关键字不能为空");
-        tmp.setDataKey(datadic.getDataKey());
+        tmp.setDataChineseKey(datadic.getDataChineseKey());
         tmp.setLastEditTime(LocalDateTime.now());
         tmp.setLastEditorID(userID);
         datadicMapper.updateById(datadic);
@@ -61,7 +61,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
 
     @Override
     public ReturnBean selectDatadicByKey(String key) {
-        Datadic datadic=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataKey",key).eq("isDelete",false));
+        Datadic datadic=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataChineseKey",key).eq("isDelete",false));
         if(null==datadic)
             return ReturnBean.error("查找无结果");
         return ReturnBean.success("查找成功",datadic);
@@ -69,7 +69,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
 
     @Override
     public ReturnBean selectAll() {
-        List<Datadic> datadics=datadicMapper.selectList(new QueryWrapper<Datadic>());
+        List<Datadic> datadics=datadicMapper.selectList(new QueryWrapper<>());
         if(0==datadics.size())
             return ReturnBean.error("查询无结果");
         return ReturnBean.success("查询成功",datadics);
