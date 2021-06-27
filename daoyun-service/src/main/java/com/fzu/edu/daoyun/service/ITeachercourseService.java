@@ -1,10 +1,9 @@
 package com.fzu.edu.daoyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.fzu.edu.daoyun.entity.Course;
-import com.fzu.edu.daoyun.entity.ReturnBean;
-import com.fzu.edu.daoyun.entity.Teachercourse;
-import com.fzu.edu.daoyun.entity.User;
+import com.fzu.edu.daoyun.entity.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +21,8 @@ public interface ITeachercourseService extends IService<Teachercourse> {
     ReturnBean getTeaCouID(Teachercourse teachercourse);
     Teachercourse getTeaCouByTeaCouId(int teaCouID);
     List<Map<String , String>> getTeaCouByUserId(int userId);
+    ReturnBean getTeaCouInfo(String classID);
+    ReturnBean selectAll();
+    ReturnBean delete(int id);
+    ReturnBean insert(User user, Course course,int year,User teacher);
 }

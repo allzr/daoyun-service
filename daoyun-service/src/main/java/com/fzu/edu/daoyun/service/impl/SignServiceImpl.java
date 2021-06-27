@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fzu.edu.daoyun.entity.*;
 import com.fzu.edu.daoyun.mapper.SignMapper;
+import com.fzu.edu.daoyun.mapper.StudentteacouMapper;
+import com.fzu.edu.daoyun.mapper.UserMapper;
 import com.fzu.edu.daoyun.service.ISignService;
 import com.fzu.edu.daoyun.service.IStudentteacouService;
 import com.fzu.edu.daoyun.service.ITeachercourseService;
@@ -12,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
+import java.time.ZoneId;
+import java.util.*;
 
 /**
  * <p>
@@ -28,17 +30,21 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
     @Autowired
     private SignMapper signMapper;
     @Autowired
-    public ITeachercourseService teachercourseService;
+    private ITeachercourseService teachercourseService;
     @Autowired
-    public IUserService userService;
+    private IUserService userService;
     @Autowired
-    public IStudentteacouService studentTeaCouService;
+    private IStudentteacouService studentTeaCouService;
+    @Autowired
+    private StudentteacouMapper studentteacouMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public ReturnBean beginSign(SignDetail signDetail){
         Teachercourse teachercourse=teachercourseService.getTeaCouByTeaCouId(signDetail.getTeaCouID());
         if(null==teachercourse)
-            return ReturnBean.error("班课未开放");
+            return ReturnBean.error("班课不存在");
         User user=userService.getUserByID(teachercourse.getUserID());
         if(null==user)
             return ReturnBean.error("用户不存在");
@@ -49,8 +55,8 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
         if(0==signDetail.getTime())
             signDetail.setTime(60);
         Sign sign=new Sign();
-        sign.setSignTime(LocalDateTime.now().plusMinutes(signDetail.getTime()));
-        sign.setCreateTime(LocalDateTime.now());
+        sign.setSignTime(LocalDateTime.now(ZoneId.of("+08:00")).plusMinutes(signDetail.getTime()));
+        sign.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
         sign.setTeaCouID(signDetail.getTeaCouID());
         sign.setSignLocationX(signDetail.getLocationX());
         sign.setSignLocationY(signDetail.getLocationY());
@@ -62,7 +68,7 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
     public ReturnBean beginSignByTime(SignDetail signDetail){
         Teachercourse teachercourse=teachercourseService.getTeaCouByTeaCouId(signDetail.getTeaCouID());
         if(null==teachercourse)
-            return ReturnBean.error("班课未开放");
+            return ReturnBean.error("班课不存在");
         User user=userService.getUserByID(teachercourse.getUserID());
         if(null==user)
             return ReturnBean.error("用户不存在");
@@ -70,10 +76,10 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
             return ReturnBean.error("非老师用户不能发起签到");
         if(null!=getNowSign(signDetail.getTeaCouID()))
             return ReturnBean.error("有未结束的签到");
-        signDetail.setCreateTime(LocalDateTime.now());
+        signDetail.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
         Sign sign=new Sign();
-        sign.setSignTime(LocalDateTime.now().plusMinutes(signDetail.getTime()));
-        sign.setCreateTime(LocalDateTime.now());
+        sign.setSignTime(LocalDateTime.now(ZoneId.of("+08:00")).plusMinutes(signDetail.getTime()));
+        sign.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
         sign.setTeaCouID(signDetail.getTeaCouID());
         sign.setSignLocationX(signDetail.getLocationX());
         sign.setSignLocationY(signDetail.getLocationY());
@@ -88,7 +94,7 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
             return ReturnBean.error("学生或班级信息不存在");
         //Teachercourse teachercourse=teachercourseService.getTeacherCourseByTeacherCourseId(signDetail.getTeaCouID());
         Sign sign=getBegin(studentteacou.getTeaCouID());
-        if(null==sign||LocalDateTime.now().isAfter(sign.getSignTime()))
+        if(null==sign||LocalDateTime.now(ZoneId.of("+08:00")).isAfter(sign.getSignTime()))
             return ReturnBean.error("签到未开放");
         if(!checkSignOrNot(signDetail)) return ReturnBean.error("请勿重复签到");
         Sign sign1=new Sign();
@@ -97,8 +103,13 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
         sign1.setCreateTime(sign.getCreateTime());
         sign1.setSignLocationX(signDetail.getLocationX());
         sign1.setSignLocationY(signDetail.getLocationY());
-        sign1.setSignTime(LocalDateTime.now());
+        sign1.setSignTime(LocalDateTime.now(ZoneId.of("+08:00")));
         signMapper.insert(sign1);
+        User user=userMapper.selectById(studentteacou.getUserID());
+        user.setExp(user.getExp()+2);
+        userMapper.updateById(user);
+        studentteacou.setEXP(studentteacou.getEXP()+2);
+        studentteacouMapper.updateById(studentteacou);
         return ReturnBean.success("签到成功");
     }
 
@@ -119,7 +130,7 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
         Sign sign=getNowSign(signDetail.getTeaCouID());
         if(null==sign)
             return ReturnBean.error("没有可以结束的签到");
-        sign.setSignTime(LocalDateTime.now());
+        sign.setSignTime(LocalDateTime.now(ZoneId.of("+08:00")));
         signMapper.updateById(sign);
         return ReturnBean.success("结束成功");
     }
@@ -132,7 +143,7 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
         if(0==signs.size())return null;
         signs.sort(Comparator.comparing(Sign::getCreateTime).reversed());
         Sign tmp=signs.get(0);
-        if(tmp.getSignTime().isAfter(LocalDateTime.now()))
+        if(tmp.getSignTime().isAfter(LocalDateTime.now(ZoneId.of("+08:00"))))
             return tmp;
         return null;
     }
@@ -147,6 +158,26 @@ public class SignServiceImpl extends ServiceImpl<SignMapper, Sign> implements IS
         if(signs.get(0).getCreateTime().equals(sign.getCreateTime()))
             return false;
         return true;
+    }
+
+    @Override
+    public ReturnBean getSignInfoBySignID(int signID) {
+        Sign sign=signMapper.selectById(signID);
+        if(null==sign) return ReturnBean.error("该记录不存在");
+        if(null!=sign.getStuTeaCouID()) return ReturnBean.error("查询错误，该签到记录为学生签到记录");
+        List<Sign> signs=new LinkedList<>();
+        if(null!=sign.getSignTime())
+            signs=signMapper.selectList(new QueryWrapper<Sign>().eq("teaCouID",sign.getTeaCouID()).gt("signTime",sign.getCreateTime()).lt("signTime",sign.getSignTime()));
+        else signs=signMapper.selectList(new QueryWrapper<Sign>().eq("teaCouID",sign.getTeaCouID()).gt("signTime",sign.getCreateTime()));
+        List<User> res=new LinkedList<>();
+        for(int i=0;i<signs.size();i++){
+            Sign tmp=signs.get(i);
+            Studentteacou studentteacou=studentteacouMapper.selectById(tmp.getStuTeaCouID());
+            User user=userMapper.selectById(studentteacou.getUserID());
+            user.setPassword(null);
+            res.add(user);
+        }
+        return ReturnBean.success("查询成功",res);
     }
 
     @Override

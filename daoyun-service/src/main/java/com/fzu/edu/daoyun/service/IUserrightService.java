@@ -19,4 +19,10 @@ public interface IUserrightService extends IService<Userright> {
     ReturnBean selectUserRightByID(int UserID);
 
     ReturnBean updateUserRightByID(Userright userright,int userID);
+
+    void insert(Userright userright);
+
+    ReturnBean selectAll();
+
+    void deleteByUserId(int userID);
 }

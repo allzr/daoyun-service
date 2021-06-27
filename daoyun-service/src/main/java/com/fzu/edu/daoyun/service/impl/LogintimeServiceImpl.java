@@ -25,11 +25,10 @@ public class LogintimeServiceImpl extends ServiceImpl<LogintimeMapper, Logintime
     private LogintimeMapper logintimeMapper;
 
     @Override
-    public void insertLoginTime(User user, LocalDateTime localDateTime, int loginType) {
+    public void insertLoginTime(User user, LocalDateTime localDateTime) {
         Logintime logintime=new Logintime();
         logintime.setUserID(user.getUserID());
-        logintime.setLoginType(loginType);
         logintime.setLoginTime(localDateTime);
-        
+        logintimeMapper.insert(logintime);
     }
 }

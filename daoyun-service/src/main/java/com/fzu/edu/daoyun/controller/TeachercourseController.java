@@ -1,10 +1,12 @@
 package com.fzu.edu.daoyun.controller;
 
 
-import com.fzu.edu.daoyun.entity.Datadicdetail;
-import com.fzu.edu.daoyun.entity.ReturnBean;
-import com.fzu.edu.daoyun.entity.Teachercourse;
+import com.fzu.edu.daoyun.entity.*;
+import com.fzu.edu.daoyun.service.ICourseService;
+import com.fzu.edu.daoyun.service.ITeachercourseService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,24 +20,29 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/teachercourse")
 public class TeachercourseController {
-    @PostMapping("/insertTeaCou")
-    @ApiOperation("增加教师与课程表关系")
-    public ReturnBean insertTeaCou(Teachercourse teachercourse){
-        return ReturnBean.success("成功");
+
+    @Autowired
+    private ITeachercourseService teachercourseService;
+    @Autowired
+    private ICourseService courseService;
+
+    @GetMapping("/selectAll")
+    @ApiOperation("查询所有班课")
+    public ReturnBean selectAll(){
+        return teachercourseService.selectAll();
     }
-    @GetMapping("/selectTeaCou")
-    @ApiOperation("查询教师与课程表关系")
-    public ReturnBean selectTeaCou(Teachercourse teachercourse){
-        return ReturnBean.success("成功");
+
+    @PostMapping("/create")
+    @ApiOperation("创建班课，已实现")
+    public ReturnBean createCourse(@RequestBody Banke banKe) {
+        User tmp = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return courseService.createCourse(tmp, banKe.getCourse(), Integer.valueOf(banKe.getOpenYear()));
     }
-    @PutMapping("/updateTeaCou")
-    @ApiOperation("删除教师与课程表关系")
-    public ReturnBean updateTeaCou(Teachercourse teachercourse){
-        return ReturnBean.success("成功");
+
+    @DeleteMapping("/delete/{id}")
+    @ApiOperation("通过主键id删除班课")
+    public ReturnBean deleteClass(@PathVariable String id){
+        return teachercourseService.delete(Integer.valueOf(id));
     }
-    @PutMapping("/deleteTeaCou")
-    @ApiOperation("删除教师与课程表关系")
-    public ReturnBean deleteTeaCou(Teachercourse teachercourse){
-        return ReturnBean.success("成功");
-    }
+
 }

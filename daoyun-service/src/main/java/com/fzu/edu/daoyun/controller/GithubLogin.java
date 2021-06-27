@@ -2,6 +2,7 @@ package com.fzu.edu.daoyun.controller;
 
 import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.entity.User;
+import com.fzu.edu.daoyun.service.ILogintimeService;
 import com.fzu.edu.daoyun.service.IUserService;
 import com.fzu.edu.daoyun.util.GitHubConstant;
 import com.fzu.edu.daoyun.util.HttpClient;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 @RestController
@@ -25,6 +27,8 @@ public class GithubLogin {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ILogintimeService logintimeService;
 
     @PostMapping("/githubLogin")
     @ApiOperation(value = "github登录")
@@ -54,17 +58,20 @@ public class GithubLogin {
                 user1.setGithubID(responseMap.get("login"));
                 user1.setPhoneNumber(responseMap.get("id"));
                 user1.setUsername(responseMap.get("name"));
-                user1.setCreateTime(LocalDateTime.now());
-                user1.setLastLoginTime(LocalDateTime.now());
+                user1.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
+                user1.setLastLoginTime(LocalDateTime.now(ZoneId.of("+08:00")));
                 user1.setGithubToken(token);
                 user1.setPassword(user1.getGithubID());
-                user1.setGithubTokenDeadtime(LocalDateTime.now().plusDays(5));
+                user1.setGithubTokenDeadtime(LocalDateTime.now(ZoneId.of("+08:00")).plusDays(5));
                 userService.insert(user1);
+                logintimeService.insertLoginTime(user1,LocalDateTime.now(ZoneId.of("+08:00")));
             }
             else{
                 user.setGithubToken(token);
                 userService.updateById(user);
+                logintimeService.insertLoginTime(user,LocalDateTime.now(ZoneId.of("+08:00")));
             }
+
             return ReturnBean.success("登录成功", token);
 
         }

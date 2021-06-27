@@ -23,7 +23,7 @@ mybatis-plus:
     map-underscore-to-camel-case: false
 logging:
   level:
-    com.fzu.edu.daoyun.mapper: debug
+    com.fzu.edu.daoyun.mapper: ERROR
 
 jwt:
   tokenHeader: Authorization

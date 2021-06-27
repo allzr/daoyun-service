@@ -16,4 +16,5 @@ public interface IUrlService extends IService<Url> {
     ReturnBean insertUrl(Url url, int userID);
     ReturnBean selectUrl(String id);
     ReturnBean updateUrl(Url url,int userID);
+    ReturnBean selectAll();
 }

@@ -15,5 +15,5 @@ import java.time.LocalDateTime;
  * @since 2021-04-12
  */
 public interface ILogintimeService extends IService<Logintime> {
-    void insertLoginTime(User user, LocalDateTime localDateTime,int loginType);
+    void insertLoginTime(User user, LocalDateTime localDateTime);
 }

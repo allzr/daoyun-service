@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.Access;
 import javax.xml.crypto.Data;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -34,9 +35,9 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
         Datadic tmp=datadicMapper.selectOne(new QueryWrapper<Datadic>().eq("dataChineseKey",datadic).eq("isDelete",false));
         if(null!=tmp&&false==tmp.getIsDelete())
             ReturnBean.error("该数据已存在");
-        datadic.setCreateTime(LocalDateTime.now());
+        datadic.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
         datadic.setLastEditorID(userID);
-        datadic.setLastEditTime(LocalDateTime.now());
+        datadic.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         if(null!=tmp) {
             datadic.setDataDicID(tmp.getDataDicID());
             datadicMapper.updateById(datadic);
@@ -53,7 +54,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
         if(null==datadic.getDataChineseKey())
             return ReturnBean.error("关键字不能为空");
         tmp.setDataChineseKey(datadic.getDataChineseKey());
-        tmp.setLastEditTime(LocalDateTime.now());
+        tmp.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         tmp.setLastEditorID(userID);
         datadicMapper.updateById(datadic);
         return ReturnBean.success("更新成功");
@@ -82,7 +83,7 @@ public class DatadicServiceImpl extends ServiceImpl<DatadicMapper, Datadic> impl
             return ReturnBean.error("删除失败，未查找到该ID");
         tmp.setIsDelete(true);
         tmp.setLastEditorID(userID);
-        tmp.setLastEditTime(LocalDateTime.now());
+        tmp.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         datadicMapper.updateById(tmp);
         return ReturnBean.success("删除成功");
     }

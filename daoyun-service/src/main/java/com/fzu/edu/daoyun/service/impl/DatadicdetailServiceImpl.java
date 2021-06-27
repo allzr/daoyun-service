@@ -10,6 +10,8 @@ import com.fzu.edu.daoyun.service.IDatadicdetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -62,6 +64,14 @@ public class DatadicdetailServiceImpl extends ServiceImpl<DatadicdetailMapper, D
 
     @Override
     public ReturnBean updateDatadicdetailByID(Datadicdetail datadicdetail) {
+        if(1==datadicdetail.getDefaultValue()){
+            List<Datadicdetail> datadicdetails=datadicdetailMapper.selectList(new QueryWrapper<Datadicdetail>().eq("dataDicID",datadicdetail.getDataDicID()).eq("defaultValue",1));
+            for(int i=0;i<datadicdetails.size();i++) {
+                Datadicdetail tmp=datadicdetails.get(i);
+                tmp.setDefaultValue(0);
+                datadicdetailMapper.updateById(tmp);
+            }
+        }
         datadicdetailMapper.updateById(datadicdetail);
         return ReturnBean.success("更新成功");
     }

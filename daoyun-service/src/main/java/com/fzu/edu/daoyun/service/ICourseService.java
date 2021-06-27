@@ -24,4 +24,6 @@ public interface ICourseService extends IService<Course> {
     Course getCourseByName(String name);
 
     String getCourseNameById(int id);
+
+    ReturnBean insertCourse(User user, Course course,int year,String phoneNumber);
 }

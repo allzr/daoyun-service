@@ -48,6 +48,9 @@ public class Userright implements Serializable {
     @TableField("systemManage")
     private Boolean systemManage;
 
+    @TableField("roleManage")
+    private Boolean roleManage;
+
     @TableField("lastEditorID")
     private Integer lastEditorID;
 

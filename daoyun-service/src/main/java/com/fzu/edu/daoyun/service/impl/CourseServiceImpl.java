@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
 
 /**
  * <p>
@@ -34,13 +36,12 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Override
     public ReturnBean createCourse(User user, Course course,int year) {
-        System.out.println(user);
         if(1==user.getUserType()){
             return ReturnBean.error("学生用户无法创建班课");
         }
         Course course1=getCourseByName(course.getName());
         if(null==course1){
-            course.setLastEditTime(LocalDateTime.now());
+            course.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
             course.setLastEditorID(user.getUserID());
             courseMapper.insert(course);
             course1=course;
@@ -48,10 +49,35 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         else if(true==course1.getIsDelete())
         {
             course1.setLastEditorID(user.getUserID());
-            course1.setLastEditTime(LocalDateTime.now());
+            course1.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
             course1.setIsDelete(false);
         }
         return teachercourseService.create(user,course1,year);
+    }
+
+    @Override
+    public ReturnBean insertCourse(User user, Course course,int year,String phoneNumber) {
+        User teacher=userService.getUserByPhoneNumber(phoneNumber);
+        if(null==teacher)
+            return ReturnBean.error("该教师不存在");
+        if(1==user.getUserType()){
+            return ReturnBean.error("学生用户无法创建班课");
+        }
+        System.out.println(course);
+        Course course1=getCourseByName(course.getName());
+        if(null==course1){
+            course.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+            course.setLastEditorID(user.getUserID());
+            courseMapper.insert(course);
+            course1=course;
+        }
+        else if(true==course1.getIsDelete())
+        {
+            course1.setLastEditorID(user.getUserID());
+            course1.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+            course1.setIsDelete(false);
+        }
+        return teachercourseService.insert(user,course1,year,teacher);
     }
 
     @Override

@@ -21,9 +21,8 @@ import org.springframework.stereotype.Service;
 import com.fzu.edu.daoyun.util.md5Str;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.time.ZoneId;
+import java.util.*;
 
 /**
  * <p>
@@ -46,6 +45,8 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
     private String tokenHead;
     @Autowired
     private LogintimeServiceImpl logintimeService;
+    @Autowired
+    private UserrightServiceImpl userrightService;
 
 
     @Override
@@ -72,9 +73,9 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         tokenMap.put("token",tokenHead+" "+token);
         //tokenMap.put("tokenHead",tokenHead);
         user=getUserByPhoneNumber(phoneNumber);
-        user.setLastLoginTime(LocalDateTime.now());
+        user.setLastLoginTime(LocalDateTime.now(ZoneId.of("+08:00")));
         userMapper.updateById(user);
-        logintimeService.insertLoginTime(user,LocalDateTime.now(),1);
+        logintimeService.insertLoginTime(user,LocalDateTime.now(ZoneId.of("+08:00")));
         return ReturnBean.success("登陆成功",tokenMap);
     }
 
@@ -93,8 +94,8 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
             user1.setIsDelete(false);
             user1.setUsername(phoneNumber);
             user1.setPassword(md5Str.getMD5Str(phoneNumber));
-            user1.setCreateTime(LocalDateTime.now());
-            user1.setLastLoginTime(LocalDateTime.now());
+            user1.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
+            user1.setLastLoginTime(LocalDateTime.now(ZoneId.of("+08:00")));
             userMapper.insert(user1);
             UsernamePasswordAuthenticationToken authenticationToken =new UsernamePasswordAuthenticationToken(user1,null,user1.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -114,8 +115,9 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         tokenMap.put("token",tokenHead+" "+token);
         //tokenMap.put("tokenHead",tokenHead);
         user=getUserByPhoneNumber(phoneNumber);
-        user.setLastLoginTime(LocalDateTime.now());
+        user.setLastLoginTime(LocalDateTime.now(ZoneId.of("+08:00")));
         userMapper.updateById(user);
+        logintimeService.insertLoginTime(user,LocalDateTime.now(ZoneId.of("+08:00")));
         return ReturnBean.success("登陆成功",tokenMap);
     }
 
@@ -136,14 +138,41 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
             return ReturnBean.error("用户名已存在");
         if(null!=getUserByPhoneNumber(userRegiser.getPhoneNumber()))
             return ReturnBean.error("手机号码已存在");
-        user.setCreateTime(LocalDateTime.now());
+        user.setCreateTime(LocalDateTime.now(ZoneId.of("+08:00")));
         userMapper.insert(user);
+        user=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",user.getPhoneNumber()));
+        Userright userright=new Userright();
+        userright.setUserID(user.getUserID());
+        if(1==user.getUserType()||2==user.getUserType())
+        {
+            userright.setCourseManage(false);
+            userright.setDicManage(false);
+            userright.setCourseManage(false);
+            userright.setManuManage(false);
+            userright.setSystemManage(false);
+            userright.setRoleManage(false);
+            userright.setLastEditorID(user.getUserID());
+            userright.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+        }
+        if(3==user.getUserType())
+        {
+            userright.setCourseManage(true);
+            userright.setDicManage(true);
+            userright.setCourseManage(true);
+            userright.setManuManage(true);
+            userright.setSystemManage(true);
+            userright.setRoleManage(true);
+            userright.setLastEditorID(user.getUserID());
+            userright.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+        }
+        userrightService.insert(userright);
         return ReturnBean.success("注册成功");
     }
 
     @Override
     public ReturnBean updateUserInfo(User user) {
         User tmp=getUserByPhoneNumber(user.getPhoneNumber());
+        tmp.setUserID(user.getUserID());
         if(null!=user.getPassword()) tmp.setPassword(user.getPassword());
         if(null!=user.getRealName()) tmp.setRealName(user.getRealName());
         if(null!=user.getUsername()) tmp.setUsername(user.getUsername());
@@ -159,7 +188,36 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
         if(null!=user.getStuTeaAdmNumber()) tmp.setStuTeaAdmNumber(user.getStuTeaAdmNumber());
         if(-1!=user.getSex()) tmp.setSex(user.getSex());
         if(-1!=user.getExp()) tmp.setExp(user.getExp());
-        tmp.setIsDelete(false);
+        if(true==tmp.getIsDelete()) {
+            tmp.setIsDelete(false);
+            user=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",user.getPhoneNumber()));
+            Userright userright=new Userright();
+            userright.setUserID(user.getUserID());
+            if(1==user.getUserType()||2==user.getUserType())
+            {
+                userright.setCourseManage(false);
+                userright.setDicManage(false);
+                userright.setCourseManage(false);
+                userright.setManuManage(false);
+                userright.setSystemManage(false);
+                userright.setRoleManage(false);
+                userright.setLastEditorID(user.getUserID());
+                userright.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+            }
+            if(3==user.getUserType())
+            {
+                userright.setCourseManage(true);
+                userright.setDicManage(true);
+                userright.setCourseManage(true);
+                userright.setManuManage(true);
+                userright.setSystemManage(true);
+                userright.setRoleManage(true);
+                userright.setLastEditorID(user.getUserID());
+                userright.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+            }
+            userrightService.insert(userright);
+        }
+        userMapper.updateById(tmp);
         return ReturnBean.success("修改成功");
     }
 
@@ -205,7 +263,7 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
 
     @Override
     public User getUserByEmail(String Email) {
-        return userMapper.selectOne(new QueryWrapper<User>().eq("email",Email).eq("isDelete",false));
+        return userMapper.selectOne(new QueryWrapper<User>().eq("email",Email).eq("isDelete",0));
     }
 
     @Override
@@ -215,6 +273,7 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
             return ReturnBean.error("查无此人");
         user.setIsDelete(true);
         userMapper.updateById(user);
+        userrightService.deleteByUserId(user.getUserID());
         return ReturnBean.success("删除成功");
     }
 
@@ -249,7 +308,7 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
             // 可以取出单个值，您可以通过官网接口文档或跳转到 response 对象的定义处查看返回字段的定义
             System.out.println(res.getRequestId());
 
-            CodeDetail codeDetail=new CodeDetail(code,LocalDateTime.now().plusMinutes(5));
+            CodeDetail codeDetail=new CodeDetail(code,LocalDateTime.now(ZoneId.of("+08:00")).plusMinutes(5));
 
             CodeSave.saveCode(phoneNumber,codeDetail);
 
@@ -291,7 +350,7 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
             // 可以取出单个值，您可以通过官网接口文档或跳转到 response 对象的定义处查看返回字段的定义
             System.out.println(res.getRequestId());
 
-            //CodeDetail codeDetail=new CodeDetail(code,LocalDateTime.now().plusMinutes(5));
+            //CodeDetail codeDetail=new CodeDetail(code,LocalDateTime.now(ZoneId.of("+08:00")).plusMinutes(5));
 
             //CodeSave.saveCode(phoneNumber,codeDetail);
 
@@ -316,7 +375,7 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
 
     @Override
     public ReturnBean getNewPassword(UserLogin userLogin) {
-        User user=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",userLogin.getPhoneNumber()).eq("isDelete",false));
+        User user=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",userLogin.getPhoneNumber()).eq("isDelete",0));
         if(null==user)return ReturnBean.error("查无此人");
         user.setPassword(userLogin.getPassword());
         userMapper.updateById(user);
@@ -330,25 +389,67 @@ public class UserServiceImpl<UserService> extends ServiceImpl<UserMapper, User> 
 
     @Override
     public ReturnBean insert(User user) {
+        User tmp=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",user.getPhoneNumber()));
+        if(null!=tmp&&false==tmp.getIsDelete())
+            return ReturnBean.error("用户已存在");
+        else if(null!=tmp&&true==tmp.getIsDelete())
+            deleteUser(user.getPhoneNumber());
         userMapper.insert(user);
+        user=userMapper.selectOne(new QueryWrapper<User>().eq("phoneNumber",user.getPhoneNumber()));
+        Userright userright=new Userright();
+        userright.setUserID(user.getUserID());
+        if(1==user.getUserType()||2==user.getUserType())
+        {
+            userright.setCourseManage(false);
+            userright.setDicManage(false);
+            userright.setCourseManage(false);
+            userright.setManuManage(false);
+            userright.setSystemManage(false);
+            userright.setRoleManage(false);
+            userright.setLastEditorID(user.getUserID());
+            userright.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+        }
+        if(3==user.getUserType())
+        {
+            userright.setCourseManage(true);
+            userright.setDicManage(true);
+            userright.setCourseManage(true);
+            userright.setManuManage(true);
+            userright.setSystemManage(true);
+            userright.setRoleManage(true);
+            userright.setLastEditorID(user.getUserID());
+            userright.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
+        }
+        userrightService.insert(userright);
         return ReturnBean.success("插入成功");
     }
 
     @Override
     public User getUserByGithubToken(String githubToken) {
-        User user=userMapper.selectOne(new QueryWrapper<User>().eq("githubToken",githubToken));
+        User user=userMapper.selectOne(new QueryWrapper<User>().eq("githubToken",githubToken).eq("isDelete",0));
         if(null==user)
             return null;
-        if(user.getGithubTokenDeadtime().isBefore(LocalDateTime.now()))
+        if(user.getGithubTokenDeadtime().isBefore(LocalDateTime.now(ZoneId.of("+08:00"))))
             return null;
         return user;
     }
 
     @Override
     public User getUserByGithubID(String id) {
-        User user=userMapper.selectOne(new QueryWrapper<User>().eq("githubID",id));
+        User user=userMapper.selectOne(new QueryWrapper<User>().eq("githubID",id).eq("isDelete",0));
         if(null==user)
             return null;
         return user;
+    }
+
+    @Override
+    public ReturnBean selectAll() {
+        List<User> users=userMapper.selectList(new QueryWrapper<User>().eq("isDelete",0));
+        for(int i=0;i<users.size();i++){
+            User tmp=users.get(i);
+            tmp.setPassword(null);
+            users.set(i,tmp);
+        }
+        return ReturnBean.success("查询成功",users);
     }
 }

@@ -2,10 +2,7 @@ package com.fzu.edu.daoyun.controller;
 
 
 import com.fzu.edu.daoyun.config.security.JwtTokenUtils;
-import com.fzu.edu.daoyun.entity.ReturnBean;
-import com.fzu.edu.daoyun.entity.User;
-import com.fzu.edu.daoyun.entity.UserLogin;
-import com.fzu.edu.daoyun.entity.UserRegiser;
+import com.fzu.edu.daoyun.entity.*;
 import com.fzu.edu.daoyun.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -98,7 +95,7 @@ public class UserController {
         return ReturnBean.success("查询成功",user);
     }
 
-    @GetMapping("/delete/{phoneNumber}")
+    @DeleteMapping("/delete/{phoneNumber}")
     @ApiOperation(value = "通过手机号码删除用户，已实现")
     public ReturnBean delete(@PathVariable String phoneNumber){
         return userService.deleteUser(phoneNumber);
@@ -124,4 +121,8 @@ public class UserController {
     public ReturnBean updateUserInfo(@RequestBody User user){
         return userService.updateUserInfo(user);
     }
+
+    @GetMapping("/selectAll")
+    @ApiOperation(value = "查询所有用户信息")
+    public ReturnBean selectAll() { return userService.selectAll();}
 }

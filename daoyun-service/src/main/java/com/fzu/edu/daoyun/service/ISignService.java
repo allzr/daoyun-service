@@ -38,4 +38,6 @@ public interface ISignService extends IService<Sign> {
     Sign getNowSign(int teaCouID);
 
     boolean checkSignOrNot(SignDetail signDetail);
+
+    ReturnBean getSignInfoBySignID(int signID);
 }

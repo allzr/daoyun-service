@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ public class SysparameterServiceImpl extends ServiceImpl<SysparameterMapper,Sysp
         if(null!=tmp)
             return ReturnBean.error("该参数已存在");
         sysparameter.setLastEditorID(userID);
-        sysparameter.setLastEditTime(LocalDateTime.now());
+        sysparameter.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         sysparameterMapper.insert(sysparameter);
         return ReturnBean.success("插入成功");
     }
@@ -49,7 +50,7 @@ public class SysparameterServiceImpl extends ServiceImpl<SysparameterMapper,Sysp
 
     @Override
     public ReturnBean updateSysParameterByKey(Sysparameter sysparameter,int userID) {
-        sysparameter.setLastEditTime(LocalDateTime.now());
+        sysparameter.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         sysparameter.setLastEditorID(userID);
         Sysparameter tmp=sysparameterMapper.selectOne(new QueryWrapper<Sysparameter>().eq("ChineseKey",sysparameter.getChineseKey()));
         if(null==tmp)

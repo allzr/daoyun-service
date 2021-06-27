@@ -53,4 +53,6 @@ public interface IUserService extends IService<User> {
     User getUserByGithubToken(String githubToken);
 
     User getUserByGithubID(String id);
+
+    ReturnBean selectAll();
 }

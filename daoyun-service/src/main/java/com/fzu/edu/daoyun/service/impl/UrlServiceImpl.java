@@ -1,5 +1,6 @@
 package com.fzu.edu.daoyun.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fzu.edu.daoyun.entity.ReturnBean;
 import com.fzu.edu.daoyun.entity.Url;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * <p>
@@ -34,7 +36,7 @@ public class UrlServiceImpl extends ServiceImpl<UrlMapper, Url> implements IUrlS
         if(null==userService.getUserByID(userID))
             return ReturnBean.error("用户不存在");
         url.setLastEditorID(userID);
-        url.setLastEditTime(LocalDateTime.now());
+        url.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         urlMapper.insert(url);
         return ReturnBean.success("插入成功");
     }
@@ -58,9 +60,14 @@ public class UrlServiceImpl extends ServiceImpl<UrlMapper, Url> implements IUrlS
             url.setUrl(tmp.getUrl());
         if(null==url.getUrlName())
             url.setUrlName(tmp.getUrlName());
-        url.setLastEditTime(LocalDateTime.now());
+        url.setLastEditTime(LocalDateTime.now(ZoneId.of("+08:00")));
         url.setLastEditorID(userID);
         urlMapper.updateById(url);
         return ReturnBean.success("Url信息更新成功");
+    }
+
+    @Override
+    public ReturnBean selectAll() {
+        return ReturnBean.success("查询成功",urlMapper.selectList(new QueryWrapper<Url>()));
     }
 }
